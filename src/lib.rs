@@ -37,3 +37,5 @@
     clippy::unreachable,
     clippy::unwrap_used
 )]
+
+mod game;
