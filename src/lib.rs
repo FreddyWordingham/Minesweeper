@@ -6,7 +6,7 @@
     clippy::restriction
 )]
 #![allow(
-    clippy::as_conversions,
+    dead_code,
     clippy::blanket_clippy_restriction_lints,
     clippy::cast_possible_truncation,
     clippy::cast_possible_wrap,
@@ -39,5 +39,6 @@
 )]
 
 mod game;
+mod parse;
 
 pub use game::GamePlugin;

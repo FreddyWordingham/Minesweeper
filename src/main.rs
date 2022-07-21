@@ -4,6 +4,7 @@
 use bevy_inspector_egui::WorldInspectorPlugin;
 
 use bevy::{
+    input::system::exit_on_esc_system,
     prelude::{default, App, ClearColor, Color, Msaa, WindowDescriptor},
     DefaultPlugins,
 };
@@ -20,6 +21,7 @@ fn main() {
             height: 600.0,
             ..default()
         })
+        .add_system(exit_on_esc_system)
         .add_plugins(DefaultPlugins)
         .add_plugin(GamePlugin);
 
