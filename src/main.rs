@@ -13,7 +13,7 @@ use minesweeper::{game::GamePlugin, parameters::Parameters, parse::json};
 fn main() {
     // args!(_bin_path: PathBuf, params_path: PathBuf);
     // let params: Parameters = json::load(&params_path);
-    let params: Parameters = json::load(Path::new("parameters.json"));
+    let params: Parameters = json::load(Path::new("assets/settings/parameters.json"));
     println!("Parameters {:?}!", params);
 
     let mut app = App::new();
