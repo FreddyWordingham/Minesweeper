@@ -39,6 +39,8 @@
 )]
 
 mod game;
-mod parse;
+mod parameters;
+pub mod parse;
 
 pub use game::GamePlugin;
+pub use parameters::Parameters;
