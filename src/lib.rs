@@ -38,9 +38,7 @@
     clippy::unwrap_used
 )]
 
-mod game;
-mod parameters;
+pub mod game;
+pub mod parameters;
 pub mod parse;
-
-pub use game::GamePlugin;
-pub use parameters::Parameters;
+pub mod utility;

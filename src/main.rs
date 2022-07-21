@@ -7,11 +7,11 @@ use bevy::{
 };
 #[cfg(feature = "debug")]
 use bevy_inspector_egui::WorldInspectorPlugin;
+use std::path::PathBuf;
 
-use minesweeper::{parse::json, GamePlugin, Parameters};
-use std::path::Path;
+use minesweeper::{args, game::GamePlugin, parameters::Parameters, parse::json};
 fn main() {
-    let params_path = Path::new("parameters.json");
+    args!(_bin_path: PathBuf, params_path: PathBuf);
     let params: Parameters = json::load(&params_path);
     println!("Parameters {:?}!", params);
 
