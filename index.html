@@ -6,6 +6,7 @@
         
         <link rel="icon" href="icon.ico">
         <style type="text/css">body {
+    font-family: "Raleway", sans-serif;
     background: linear-gradient(
             135deg,
             white 0%,
@@ -20,6 +21,16 @@
 }
 canvas {
     background-color: white;
+    display: none;
+}
+
+#container {
+    width: calc(100vw - 16px);
+    height: calc(100vh - 16px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 </style>
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,6 +104,29 @@ canvas {
     });
 })();
 </script>
+
+        <div id="container">
+            <div id="display">
+                <script type="module">
+                    import init from "./wasm/main.js";
+                    init();
+                </script>
+            </div>
+            <h1>FW</h1>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                let init_display = setInterval(function () {
+                    let canvas = $("body").children("canvas");
+
+                    if (canvas.length > 0) {
+                        canvas.detach().appendTo("#display").slideDown();
+                        clearInterval(init_display);
+                    }
+                }, 100);
+            });
+        </script>
     
 
 <script type="module">import init from '/Minesweeper/minesweeper-ebf9d4ae55e042fe.js';init('/Minesweeper/minesweeper-ebf9d4ae55e042fe_bg.wasm');</script></body></html>
