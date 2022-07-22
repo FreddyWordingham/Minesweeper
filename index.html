@@ -14,11 +14,6 @@
             href="https://fonts.googleapis.com/css2?family=Raleway&display=swap"
             rel="stylesheet"
         />
-        <script
-            src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-            crossorigin="anonymous"
-        ></script>
     </head>
     <body>
         <link data-trunk rel="inline" href="build/web/sound.js" />
@@ -34,16 +29,20 @@
         </div>
 
         <script>
-            $(document).ready(function () {
+            (() => {
                 let init_display = setInterval(function () {
-                    let canvas = $("body").children("canvas");
+                    let canvas = document.body.getElementsByTagName("canvas");
 
                     if (canvas.length > 0) {
-                        canvas.detach().appendTo("#display").slideDown();
+                        var fragment = document.createDocumentFragment();
+                        fragment.appendChild(canvas);
+                        document
+                            .getElementById("display")
+                            .appendChild(fragment);
                         clearInterval(init_display);
                     }
                 }, 100);
-            });
+            })();
         </script>
     </body>
 </html>
