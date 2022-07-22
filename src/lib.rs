@@ -39,6 +39,6 @@
 )]
 
 pub mod game;
-pub mod parameters;
-pub mod parse;
+// pub mod parameters;
+// pub mod parse;
 pub mod utility;
