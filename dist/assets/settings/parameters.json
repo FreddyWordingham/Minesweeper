@@ -1,0 +1,5 @@
+{
+    "window_title": "Minesweeper",
+    "window_clear_col": "#FF00FF",
+    "window_res": [800.0, 600.0]
+}

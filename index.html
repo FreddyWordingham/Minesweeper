@@ -4,40 +4,16 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Minesweeper</title>
+        <link rel="icon" href="icon.ico" />
         <link data-trunk rel="copy-dir" href="assets" />
         <link data-trunk rel="copy-file" href="build/windows/icon.ico" />
-        <link rel="icon" href="icon.ico" />
         <link data-trunk rel="inline" href="build/web/styles.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Raleway&display=swap"
-            rel="stylesheet"
-        />
     </head>
     <body>
         <link data-trunk rel="inline" href="build/web/sound.js" />
-
-        <div id="container">
-            <div id="display"></div>
-            <h1>FW</h1>
+        <link data-trunk rel="inline" href="build/web/setup_display.js" />
+        <div class="container">
+            <div id="wasm-window"></div>
         </div>
-
-        <script>
-            (() => {
-                let init_display = setInterval(function () {
-                    let canvas = document.body.getElementsByTagName("canvas");
-
-                    if (canvas.length > 0) {
-                        var fragment = document.createDocumentFragment();
-                        fragment.appendChild(canvas);
-                        document
-                            .getElementById("display")
-                            .appendChild(fragment);
-                        clearInterval(init_display);
-                    }
-                }, 100);
-            })();
-        </script>
     </body>
 </html>
