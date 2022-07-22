@@ -8,7 +8,7 @@
         <style type="text/css">body {
     font-family: "Raleway", sans-serif;
     background: linear-gradient(
-            135deg,
+            45deg,
             white 0%,
             white 49%,
             black 49%,
@@ -25,8 +25,8 @@ canvas {
 }
 
 #container {
-    width: calc(100vw - 16px);
-    height: calc(100vh - 16px);
+    width: 100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,7 +36,6 @@ canvas {
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
         <link href="https://fonts.googleapis.com/css2?family=Raleway&amp;display=swap" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     
 <link rel="preload" href="/Minesweeper/minesweeper-ebf9d4ae55e042fe_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
 <link rel="modulepreload" href="/Minesweeper/minesweeper-ebf9d4ae55e042fe.js"></head>
@@ -106,26 +105,25 @@ canvas {
 </script>
 
         <div id="container">
-            <div id="display">
-                <script type="module">
-                    import init from "./wasm/main.js";
-                    init();
-                </script>
-            </div>
+            <div id="display"></div>
             <h1>FW</h1>
         </div>
 
         <script>
-            $(document).ready(function () {
+            (() => {
                 let init_display = setInterval(function () {
-                    let canvas = $("body").children("canvas");
+                    let canvas = document.body.getElementsByTagName("canvas");
 
                     if (canvas.length > 0) {
-                        canvas.detach().appendTo("#display").slideDown();
+                        var fragment = document.createDocumentFragment();
+                        fragment.appendChild(canvas);
+                        document
+                            .getElementById("display")
+                            .appendChild(fragment);
                         clearInterval(init_display);
                     }
                 }, 100);
-            });
+            })();
         </script>
     
 
