@@ -1,14 +1,16 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use bevy::{
-    input::system::exit_on_esc_system,
-    prelude::{default, App, ClearColor, Color, Msaa, WindowDescriptor},
-    DefaultPlugins,
-};
+use bevy::{input::system::exit_on_esc_system, prelude::*, DefaultPlugins};
 #[cfg(feature = "debug")]
 use bevy_inspector_egui::WorldInspectorPlugin;
 
 use minesweeper::{game::GamePlugin, settings};
+
+#[derive(Clone, Eq, PartialEq, Debug, Hash)]
+enum AppState {
+    Loading,
+    Playing,
+}
 
 fn main() {
     let mut app = App::new();
@@ -24,11 +26,34 @@ fn main() {
             ..default()
         })
         .add_system(exit_on_esc_system)
-        .add_plugins(DefaultPlugins)
-        .add_plugin(GamePlugin);
-
+        .add_plugins(DefaultPlugins);
     #[cfg(feature = "debug")]
     app.add_plugin(WorldInspectorPlugin::new());
+    app.add_startup_system(camera_setup)
+        .add_startup_system(setup_world_map)
+        .add_startup_system(begin_running)
+        .add_state(AppState::Loading)
+        .add_plugin(GamePlugin(AppState::Playing));
 
     app.run();
+}
+
+fn camera_setup(mut commands: Commands) {
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+}
+
+fn setup_world_map(
+    mut _commands: Commands,
+    mut state: ResMut<State<AppState>>,
+    _asset_server: Res<AssetServer>,
+) {
+    println!("Set up world map");
+}
+
+fn begin_running(
+    mut _commands: Commands,
+    mut state: ResMut<State<AppState>>,
+    _asset_server: Res<AssetServer>,
+) {
+    state.set(AppState::Playing).unwrap();
 }
