@@ -22,5 +22,28 @@
     </head>
     <body>
         <link data-trunk rel="inline" href="build/web/sound.js" />
+
+        <div id="container">
+            <div id="display">
+                <script type="module">
+                    import init from "./wasm/main.js";
+                    init();
+                </script>
+            </div>
+            <h1>FW</h1>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                let init_display = setInterval(function () {
+                    let canvas = $("body").children("canvas");
+
+                    if (canvas.length > 0) {
+                        canvas.detach().appendTo("#display").slideDown();
+                        clearInterval(init_display);
+                    }
+                }, 100);
+            });
+        </script>
     </body>
 </html>
