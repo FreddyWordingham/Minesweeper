@@ -6,6 +6,7 @@ use bevy::{
     prelude::{default, App, ClearColor, Color, Msaa, WindowDescriptor},
     DefaultPlugins,
 };
+#[cfg(feature = "debug")]
 use bevy_inspector_egui::WorldInspectorPlugin;
 
 use minesweeper::settings;
