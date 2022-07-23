@@ -1,8 +1,7 @@
-use crate::loading::AudioAssets;
-use bevy::prelude::*;
+use bevy::prelude::{App, Plugin, Res, SystemSet};
 use bevy_kira_audio::{Audio, AudioPlugin as KiraAudioPlugin};
 
-use crate::game::GameState;
+use crate::{game::GameState, loading::AudioAssets};
 
 pub struct AudioPlugin;
 
@@ -15,9 +14,9 @@ impl Plugin for AudioPlugin {
 }
 
 impl AudioPlugin {
-    fn start_audio(_audio_assets: Res<AudioAssets>, audio: Res<Audio>) {
+    fn start_audio(audio_assets: Res<AudioAssets>, audio: Res<Audio>) {
         audio.set_volume(0.1);
-        // audio.play_looped(audio_assets.explosion.clone());
+        audio.play_looped(audio_assets.explosion.clone());
         audio.resume();
     }
 

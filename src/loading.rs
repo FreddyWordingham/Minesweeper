@@ -27,10 +27,19 @@ pub struct FontAssets {
 pub struct AudioAssets {
     #[asset(path = "audio/explosion.ogg")]
     pub explosion: Handle<AudioSource>,
+
+    #[asset(path = "audio/select_1.ogg")]
+    pub select_1: Handle<AudioSource>,
+
+    #[asset(path = "audio/select_2.ogg")]
+    pub select_2: Handle<AudioSource>,
 }
 
 #[derive(AssetCollection)]
 pub struct TextureAssets {
     #[asset(path = "icons/bomb.png")]
     pub bomb: Handle<Image>,
+
+    #[asset(path = "icons/flag.png")]
+    pub flag: Handle<Image>,
 }
