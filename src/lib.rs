@@ -41,6 +41,7 @@
 mod audio;
 mod game;
 mod loading;
+mod menu;
 pub mod settings;
 
 pub use game::GamePlugin;
