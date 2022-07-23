@@ -52,9 +52,7 @@ impl GamePlugin {
     #[allow(clippy::needless_pass_by_value)]
     fn state_handler(mut state: ResMut<State<GameState>>, keys: Res<Input<KeyCode>>) {
         if keys.just_pressed(KeyCode::Space) {
-            if state.current() == &GameState::Menu {
-                state.set(GameState::Playing).unwrap();
-            } else {
+            if state.current() == &GameState::Playing {
                 state.set(GameState::Menu).unwrap();
             }
         }

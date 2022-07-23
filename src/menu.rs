@@ -10,8 +10,16 @@ impl Plugin for MenuPlugin {
             .add_system_set(SystemSet::on_enter(GameState::Menu).with_system(Self::setup_menu))
             .add_system_set(
                 SystemSet::on_update(GameState::Menu).with_system(Self::click_play_button),
+            )
+            .add_system_set(
+                SystemSet::on_exit(GameState::Menu).with_system(Self::despawn_menu_camera),
             );
     }
+}
+
+#[derive(Debug)]
+pub struct Menu {
+    pub camera_entity: Entity,
 }
 
 struct ButtonColors {
@@ -38,7 +46,9 @@ impl MenuPlugin {
         font_assets: Res<FontAssets>,
         button_colors: Res<ButtonColors>,
     ) {
-        commands.spawn_bundle(UiCameraBundle::default());
+        let camera_entity = commands.spawn_bundle(UiCameraBundle::default()).id();
+        commands.insert_resource(Menu { camera_entity });
+
         commands
             .spawn_bundle(ButtonBundle {
                 style: Style {
@@ -92,5 +102,9 @@ impl MenuPlugin {
                 }
             }
         }
+    }
+
+    fn despawn_menu_camera(mut commands: Commands, menu: Res<Menu>) {
+        commands.entity(menu.camera_entity).despawn_recursive();
     }
 }
