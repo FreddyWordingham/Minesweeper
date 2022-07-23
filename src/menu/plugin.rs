@@ -1,12 +1,17 @@
 use bevy::prelude::*;
 
-use crate::{game::GameState, loading::FontAssets, settings};
+use crate::{
+    game::GameState,
+    loading::FontAssets,
+    menu::{ButtonColours, UiCamera},
+    settings,
+};
 
 pub struct MenuPlugin;
 
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<ButtonColors>()
+        app.init_resource::<ButtonColours>()
             .add_system_set(SystemSet::on_enter(GameState::Menu).with_system(Self::setup_menu))
             .add_system_set(
                 SystemSet::on_update(GameState::Menu).with_system(Self::click_play_button),
@@ -17,37 +22,16 @@ impl Plugin for MenuPlugin {
     }
 }
 
-#[derive(Debug)]
-pub struct Menu {
-    pub camera_entity: Entity,
-}
-
-struct ButtonColors {
-    normal: UiColor,
-    hovered: UiColor,
-}
-
-impl Default for ButtonColors {
-    fn default() -> Self {
-        ButtonColors {
-            normal: Color::hex(settings::BUTTON_COL.split_at(1).1)
-                .unwrap()
-                .into(),
-            hovered: Color::hex(settings::BUTTON_HOVER_COL.split_at(1).1)
-                .unwrap()
-                .into(),
-        }
-    }
-}
-
 impl MenuPlugin {
     fn setup_menu(
         mut commands: Commands,
         font_assets: Res<FontAssets>,
-        button_colors: Res<ButtonColors>,
+        button_colors: Res<ButtonColours>,
     ) {
-        let camera_entity = commands.spawn_bundle(UiCameraBundle::default()).id();
-        commands.insert_resource(Menu { camera_entity });
+        let ui_camera_entity = commands.spawn_bundle(UiCameraBundle::default()).id();
+        commands.insert_resource(UiCamera {
+            entity: ui_camera_entity,
+        });
 
         commands
             .spawn_bundle(ButtonBundle {
@@ -81,7 +65,7 @@ impl MenuPlugin {
 
     fn click_play_button(
         mut commands: Commands,
-        button_colors: Res<ButtonColors>,
+        button_colors: Res<ButtonColours>,
         mut state: ResMut<State<GameState>>,
         mut interaction_query: Query<
             (Entity, &Interaction, &mut UiColor),
@@ -104,7 +88,7 @@ impl MenuPlugin {
         }
     }
 
-    fn despawn_menu_camera(mut commands: Commands, menu: Res<Menu>) {
-        commands.entity(menu.camera_entity).despawn_recursive();
+    fn despawn_menu_camera(mut commands: Commands, ui_camera: Res<UiCamera>) {
+        commands.entity(ui_camera.entity).despawn_recursive();
     }
 }
