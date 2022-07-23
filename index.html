@@ -2,9 +2,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Minesweeper</title>
-        
-        
         <link rel="icon" href="icon.ico">
+        
+        
         <style type="text/css">body {
     font-family: "Raleway", sans-serif;
     background: linear-gradient(
@@ -21,10 +21,9 @@
 }
 canvas {
     background-color: white;
-    display: none;
 }
 
-#container {
+.container {
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -33,12 +32,9 @@ canvas {
     align-items: center;
 }
 </style>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-        <link href="https://fonts.googleapis.com/css2?family=Raleway&amp;display=swap" rel="stylesheet">
     
-<link rel="preload" href="/Minesweeper/minesweeper-ebf9d4ae55e042fe_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
-<link rel="modulepreload" href="/Minesweeper/minesweeper-ebf9d4ae55e042fe.js"></head>
+<link rel="preload" href="/Minesweeper/minesweeper-732ca18ab0f31ec5_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/Minesweeper/minesweeper-732ca18ab0f31ec5.js"></head>
     <body>
         <script>// Insert hack to make sound autoplay on Chrome as soon as the user interacts with the tab:
 // https://developers.google.com/web/updates/2018/11/web-audio-autoplay#moving-forward
@@ -103,28 +99,23 @@ canvas {
     });
 })();
 </script>
+        <script>(() => {
+    const check_interval = 500; // ms
+    let init_display = setInterval(function () {
+        let canvas = document.body.getElementsByTagName("canvas");
 
-        <div id="container">
-            <div id="display"></div>
-            <h1>FW</h1>
+        if (canvas.length > 0) {
+            var fragment = document.createDocumentFragment();
+            fragment.appendChild(canvas[0]);
+            document.getElementById("wasm-window").appendChild(fragment);
+            clearInterval(init_display);
+        }
+    }, check_interval);
+})();
+</script>
+        <div class="container">
+            <div id="wasm-window"></div>
         </div>
-
-        <script>
-            (() => {
-                let init_display = setInterval(function () {
-                    let canvas = document.body.getElementsByTagName("canvas");
-
-                    if (canvas.length > 0) {
-                        var fragment = document.createDocumentFragment();
-                        fragment.appendChild(canvas);
-                        document
-                            .getElementById("display")
-                            .appendChild(fragment);
-                        clearInterval(init_display);
-                    }
-                }, 100);
-            })();
-        </script>
     
 
-<script type="module">import init from '/Minesweeper/minesweeper-ebf9d4ae55e042fe.js';init('/Minesweeper/minesweeper-ebf9d4ae55e042fe_bg.wasm');</script></body></html>
+<script type="module">import init from '/Minesweeper/minesweeper-732ca18ab0f31ec5.js';init('/Minesweeper/minesweeper-732ca18ab0f31ec5_bg.wasm');</script></body></html>
