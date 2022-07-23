@@ -8,6 +8,7 @@ use minesweeper::{game::GamePlugin, settings};
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash)]
 enum AppState {
+    Loading,
     Paused,
     Playing,
 }
@@ -31,7 +32,8 @@ fn main() {
     app.add_plugin(WorldInspectorPlugin::new());
     app.add_startup_system(camera_setup)
         .add_startup_system(setup_world_map)
-        .add_state(AppState::Paused)
+        .add_startup_system(begin_game)
+        .add_state(AppState::Loading)
         .add_plugin(GamePlugin(AppState::Playing))
         .add_system(state_handler);
 
@@ -48,6 +50,10 @@ fn setup_world_map(
     _asset_server: Res<AssetServer>,
 ) {
     println!("Set up world map");
+}
+
+fn begin_game(mut state: ResMut<State<AppState>>, keys: Res<Input<KeyCode>>) {
+    state.set(AppState::Paused).unwrap();
 }
 
 fn state_handler(mut state: ResMut<State<AppState>>, keys: Res<Input<KeyCode>>) {
