@@ -38,6 +38,7 @@
     clippy::unwrap_used
 )]
 
+mod audio;
 mod game;
 mod loading;
 pub mod settings;
