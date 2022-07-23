@@ -5,13 +5,16 @@ use bevy::{
     },
 };
 
-use crate::{audio::AudioPlugin, loading::LoadingPlugin, menu::MenuPlugin};
+use crate::{
+    audio::AudioPlugin, generation::GenerationPlugin, loading::LoadingPlugin, menu::MenuPlugin,
+};
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash)]
 pub enum GameState {
     Loading,
-    Playing,
+    Generating,
     Menu,
+    Playing,
 }
 
 pub struct GamePlugin;
@@ -21,6 +24,7 @@ impl Plugin for GamePlugin {
         app.add_state(GameState::Loading)
             .add_plugin(LoadingPlugin)
             .add_plugin(AudioPlugin)
+            .add_plugin(GenerationPlugin)
             .add_plugin(MenuPlugin)
             .add_system(Self::state_handler)
             .add_system_set(
