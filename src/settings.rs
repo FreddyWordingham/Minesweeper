@@ -1,7 +1,7 @@
 //! Compile time configuration.
 
 /// Window background colour.
-pub const WINDOW_CLEAR_COL: &str = "#A000A0";
+pub const WINDOW_CLEAR_COL: &str = "#444";
 
 /// Window title.
 pub const WINDOW_TITLE: &str = "Minesweeper";
