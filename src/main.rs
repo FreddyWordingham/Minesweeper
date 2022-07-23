@@ -44,7 +44,7 @@ fn camera_setup(mut commands: Commands) {
 
 fn setup_world_map(
     mut _commands: Commands,
-    mut state: ResMut<State<AppState>>,
+    mut _state: ResMut<State<AppState>>,
     _asset_server: Res<AssetServer>,
 ) {
     println!("Set up world map");
