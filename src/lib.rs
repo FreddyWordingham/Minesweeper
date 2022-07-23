@@ -38,4 +38,7 @@
     clippy::unwrap_used
 )]
 
+mod game;
 pub mod settings;
+
+pub use game::GamePlugin;

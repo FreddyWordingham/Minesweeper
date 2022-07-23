@@ -1,5 +1,8 @@
 //! Compile time configuration.
 
+/// Window MSAA samples.
+pub const WINDOW_SAMPLES: u32 = 1;
+
 /// Window background colour.
 pub const WINDOW_CLEAR_COL: &str = "#444";
 
