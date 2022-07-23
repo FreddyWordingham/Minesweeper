@@ -39,6 +39,7 @@
 )]
 
 mod game;
+mod loading;
 pub mod settings;
 
 pub use game::GamePlugin;
