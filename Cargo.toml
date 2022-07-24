@@ -28,6 +28,7 @@ bevy_asset_loader = { git = "https://github.com/NiklasEi/bevy_asset_loader", bra
 bevy_kira_audio = { version = "0.10", features = ["ogg"] }
 bevy-inspector-egui = { version = "0.11", optional = true }
 iyes_loopless = { git = "https://github.com/NiklasEi/iyes_loopless", branch = "loopless-schedule-ext-trait" }
+ndarray = { version = "0.15.0", features = ["blas"] }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies.bevy]
 version = "0.7"
