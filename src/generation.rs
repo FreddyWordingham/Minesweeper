@@ -1,9 +1,11 @@
-use bevy::{log, prelude::*};
+use bevy::{log, prelude::*, sprite::Anchor};
 use iyes_loopless::prelude::*;
 
 use crate::{
     game::GameState,
     resources::{Board, TileMap},
+    settings,
+    utility::Bounds,
 };
 
 pub struct GenerationPlugin;
@@ -27,22 +29,35 @@ impl GenerationPlugin {
         let mut tile_map = TileMap::new([40, 20]);
         tile_map.add_bombs(40);
 
-        let board_size = Vec2::new(40.0, 30.0);
+        let board_size = Vec2::new(settings::WINDOW_RES[0], settings::WINDOW_RES[1]);
+        let origin = Vec2::new(
+            -0.5 * settings::WINDOW_RES[0],
+            -0.5 * settings::WINDOW_RES[1],
+        );
+        let board_bounds = Bounds {
+            mins: origin,
+            maxs: origin + board_size,
+        };
 
         let board_entity = commands
             .spawn()
             .insert(Name::new("Board"))
-            .insert(Transform::default())
+            .insert(Transform::from_translation(Vec3::new(
+                board_bounds.mins.x,
+                board_bounds.mins.y,
+                0.0,
+            )))
             .insert(GlobalTransform::default())
             .with_children(|parent| {
                 parent
                     .spawn_bundle(SpriteBundle {
                         sprite: Sprite {
-                            color: Color::PURPLE,
-                            custom_size: Some(board_size),
+                            color: Color::hex(settings::BOARD_COL.split_at(1).1).unwrap(),
+                            custom_size: Some(board_bounds.maxs - board_bounds.mins),
+                            anchor: Anchor::BottomLeft,
                             ..default()
                         },
-                        transform: Transform::from_xyz(board_size.x * 0.5, board_size.y * 0.5, 0.0),
+                        transform: Transform::from_xyz(0.0, 0.0, 0.0),
                         ..default()
                     })
                     .insert(Name::new("Background"));

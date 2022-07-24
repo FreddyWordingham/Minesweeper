@@ -1,8 +1,8 @@
 // disable console on windows for release builds
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-#[cfg(feature = "debug")]
-use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
+// #[cfg(feature = "debug")]
+// use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::{input::system::exit_on_esc_system, prelude::*, DefaultPlugins};
 #[cfg(feature = "debug")]
 use bevy_inspector_egui::WorldInspectorPlugin;

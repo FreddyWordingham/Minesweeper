@@ -39,6 +39,7 @@
 )]
 
 // mod audio;
+mod camera;
 mod game;
 mod generation;
 mod loading;

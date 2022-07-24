@@ -1,7 +1,14 @@
 use bevy::{log, prelude::*, utils::Duration};
 use iyes_loopless::prelude::*;
 
-use crate::{generation::GenerationPlugin, loading::LoadingPlugin, resources::GameCamera};
+use crate::{
+    camera::CameraPlugin, generation::GenerationPlugin, loading::LoadingPlugin,
+    resources::GameCamera,
+};
+
+const MIN_ZOOM: f32 = 0.1;
+const MAX_ZOOM: f32 = 1000.0;
+const ZOOM_SPEED: f32 = 0.1;
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash)]
 pub enum GameState {
@@ -29,11 +36,14 @@ impl Plugin for GamePlugin {
                 "FixedUpdate",
                 FixedTimestepStage::from_stage(Duration::from_millis(1000), fixed_update),
             )
-            .add_plugin(GenerationPlugin)
             .add_plugin(LoadingPlugin)
+            .add_plugin(GenerationPlugin)
+            .add_plugin(CameraPlugin)
             .add_system(Self::test_system)
             .add_enter_system(GameState::Playing, Self::add_camera)
-            .add_exit_system(GameState::Playing, Self::remove_camera);
+            .add_exit_system(GameState::Playing, Self::remove_camera)
+            .add_enter_system(GameState::Menu, Self::add_camera)
+            .add_exit_system(GameState::Menu, Self::remove_camera);
     }
 }
 
