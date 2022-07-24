@@ -17,18 +17,21 @@ impl Plugin for GamePlugin {
     #[inline]
     fn build(&self, app: &mut App) {
         let mut fixed_update = SystemStage::parallel();
-        fixed_update.add_system(Self::test_system_playing.run_in_state(GameState::Playing));
+        fixed_update
+            .add_system(Self::test_system_loading.run_in_state(GameState::Loading))
+            .add_system(Self::test_system_generating.run_in_state(GameState::Generating))
+            .add_system(Self::test_system_menu.run_in_state(GameState::Menu))
+            .add_system(Self::test_system_playing.run_in_state(GameState::Playing));
 
         app.add_loopless_state(GameState::Loading)
             .add_stage_before(
                 CoreStage::Update,
                 "FixedUpdate",
-                FixedTimestepStage::from_stage(Duration::from_millis(125), fixed_update),
+                FixedTimestepStage::from_stage(Duration::from_millis(1000), fixed_update),
             )
             .add_plugin(GenerationPlugin)
             .add_plugin(LoadingPlugin)
-            .add_system(Self::test_system)
-            .add_enter_system(GameState::Playing, Self::add_camera);
+            .add_system(Self::test_system);
     }
 }
 
@@ -52,16 +55,26 @@ impl GamePlugin {
                     log::info!("Switching to playing state");
                     commands.insert_resource(NextState(GameState::Playing));
                 }
-                _ => {}
+                _ => {
+                    log::info!("Can not switch states from {:?}", current_state.0);
+                }
             }
         }
     }
 
-    fn test_system_playing() {
-        log::info!("playing");
+    fn test_system_loading() {
+        log::info!("** loading **");
     }
 
-    fn add_camera(mut commands: Commands) {
-        commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    fn test_system_generating() {
+        log::info!("** generating **");
+    }
+
+    fn test_system_menu() {
+        log::info!("** menu **");
+    }
+
+    fn test_system_playing() {
+        log::info!("** playing **");
     }
 }

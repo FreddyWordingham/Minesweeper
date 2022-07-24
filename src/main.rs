@@ -31,9 +31,9 @@ fn main() {
 
     #[cfg(feature = "debug")]
     {
-        app.add_plugin(FrameTimeDiagnosticsPlugin::default())
-            .add_plugin(WorldInspectorPlugin::new())
-            .add_plugin(LogDiagnosticsPlugin::default());
+        app.add_plugin(WorldInspectorPlugin::new());
+        // .add_plugin(FrameTimeDiagnosticsPlugin::default())
+        // .add_plugin(LogDiagnosticsPlugin::default());
     }
 
     app.add_plugin(GamePlugin).run();

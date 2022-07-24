@@ -10,8 +10,13 @@ pub struct GenerationPlugin;
 
 impl Plugin for GenerationPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(Self::generate_map.run_unless_resource_exists::<Board>())
-            .add_system(Self::proceed_to_menu.run_if_resource_exists::<Board>());
+        app.add_system_set(
+            ConditionSet::new()
+                .run_in_state(GameState::Generating)
+                .with_system(Self::generate_map.run_unless_resource_exists::<Board>())
+                .with_system(Self::proceed_to_menu.run_if_resource_exists::<Board>())
+                .into(),
+        );
     }
 }
 
@@ -22,7 +27,7 @@ impl GenerationPlugin {
         let mut tile_map = TileMap::new([40, 20]);
         tile_map.add_bombs(40);
 
-        let board_size = Vec2::new(400.0, 300.0);
+        let board_size = Vec2::new(40.0, 30.0);
 
         let board_entity = commands
             .spawn()
