@@ -14,6 +14,7 @@ pub enum GameState {
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
+    #[inline]
     fn build(&self, app: &mut App) {
         let mut fixed_update = SystemStage::parallel();
         fixed_update.add_system(Self::test_system_playing.run_in_state(GameState::Playing));

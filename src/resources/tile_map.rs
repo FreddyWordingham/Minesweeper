@@ -7,8 +7,10 @@ pub struct TileMap {
 }
 
 impl TileMap {
+    #[inline]
+    #[must_use]
     pub fn new(size: [usize; 2]) -> Self {
-        TileMap {
+        Self {
             map: Array2::from_elem(size, Tile::Empty),
         }
     }
