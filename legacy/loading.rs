@@ -1,6 +1,7 @@
 use bevy::prelude::{App, AssetServer, Font, Handle, HandleUntyped, Image, Mut, Plugin, World};
 use bevy_asset_loader::prelude::*;
 use bevy_kira_audio::AudioSource;
+use iyes_loopless::prelude::AppLooplessStateExt;
 
 use crate::game::GameState;
 
@@ -8,13 +9,15 @@ pub struct LoadingPlugin;
 
 impl Plugin for LoadingPlugin {
     fn build(&self, app: &mut App) {
-        app.add_loading_state(
-            LoadingState::new(GameState::Loading)
-                .continue_to_state(GameState::Generating)
-                .with_collection::<FontAssets>()
-                .with_collection::<AudioAssets>()
-                .with_collection::<TextureAssets>(),
-        );
+        app.add_state(GameState::Loading)
+            .add_loopless_state(GameState::Loading)
+            .add_loading_state(
+                LoadingState::new(GameState::Loading)
+                    .continue_to_state(GameState::Generating)
+                    .with_collection::<FontAssets>()
+                    .with_collection::<AudioAssets>()
+                    .with_collection::<TextureAssets>(),
+            );
     }
 }
 

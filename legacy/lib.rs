@@ -38,11 +38,11 @@
     clippy::unwrap_used
 )]
 
-// mod audio;
+mod audio;
 mod game;
-// mod generation;
+mod generation;
 mod loading;
-// mod menu;
+mod menu;
 pub mod settings;
 
 pub use game::GamePlugin;

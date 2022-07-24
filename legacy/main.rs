@@ -10,7 +10,6 @@ use bevy::{
 };
 #[cfg(feature = "debug")]
 use bevy_inspector_egui::WorldInspectorPlugin;
-use bevy_kira_audio::AudioPlugin;
 
 use minesweeper::{settings, GamePlugin};
 
@@ -30,8 +29,7 @@ fn main() {
         ..default()
     })
     .add_system(exit_on_esc_system)
-    .add_plugins(DefaultPlugins)
-    .add_plugin(AudioPlugin);
+    .add_plugins(DefaultPlugins);
 
     #[cfg(feature = "debug")]
     {

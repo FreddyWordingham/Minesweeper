@@ -2,7 +2,7 @@ use bevy::{
     log,
     prelude::{App, Commands, Plugin},
 };
-use iyes_loopless::prelude::ConditionSet;
+use iyes_loopless::prelude::*;
 
 pub struct GenerationPlugin;
 
