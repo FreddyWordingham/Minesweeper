@@ -1,5 +1,7 @@
 use ndarray::Array2;
 
+use crate::resources::Tile;
+
 /// Base tile map.
 #[derive(Debug, Clone)]
 pub struct TileMap {
@@ -14,11 +16,4 @@ impl TileMap {
             map: Array2::from_elem(size, Tile::Empty),
         }
     }
-}
-
-#[derive(Debug, Copy, Clone, Eq, PartialEq)]
-pub enum Tile {
-    Bomb,
-    BombNeighbor(u8),
-    Empty,
 }
