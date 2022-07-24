@@ -40,7 +40,7 @@
 
 // mod audio;
 mod game;
-// mod generation;
+mod generation;
 mod loading;
 // mod menu;
 pub mod settings;

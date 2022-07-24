@@ -3,11 +3,7 @@
 
 #[cfg(feature = "debug")]
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
-use bevy::{
-    input::system::exit_on_esc_system,
-    prelude::{default, App, ClearColor, Color, Msaa, WindowDescriptor},
-    DefaultPlugins,
-};
+use bevy::{input::system::exit_on_esc_system, prelude::*, DefaultPlugins};
 #[cfg(feature = "debug")]
 use bevy_inspector_egui::WorldInspectorPlugin;
 use bevy_kira_audio::AudioPlugin;

@@ -1,13 +1,7 @@
-use bevy::{
-    log,
-    prelude::{App, Commands, Input, KeyCode, Plugin, Res},
-};
-use iyes_loopless::{
-    condition::IntoConditionalSystem,
-    prelude::{AppLooplessStateExt, NextState},
-};
+use bevy::{log, prelude::*};
+use iyes_loopless::prelude::*;
 
-use crate::loading::LoadingPlugin;
+use crate::{generation::GenerationPlugin, loading::LoadingPlugin};
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash)]
 pub enum GameState {
@@ -22,6 +16,7 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.add_loopless_state(GameState::Loading)
+            .add_plugin(GenerationPlugin)
             .add_plugin(LoadingPlugin)
             .add_system(Self::test_system)
             .add_system(Self::test_system_playing.run_in_state(GameState::Playing));
