@@ -1,7 +1,7 @@
 use bevy::{log, prelude::*, utils::Duration};
 use iyes_loopless::prelude::*;
 
-use crate::{generation::GenerationPlugin, loading::LoadingPlugin};
+use crate::{generation::GenerationPlugin, loading::LoadingPlugin, resources::GameCamera};
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash)]
 pub enum GameState {
@@ -31,7 +31,9 @@ impl Plugin for GamePlugin {
             )
             .add_plugin(GenerationPlugin)
             .add_plugin(LoadingPlugin)
-            .add_system(Self::test_system);
+            .add_system(Self::test_system)
+            .add_enter_system(GameState::Playing, Self::add_camera)
+            .add_exit_system(GameState::Playing, Self::remove_camera);
     }
 }
 
@@ -60,6 +62,17 @@ impl GamePlugin {
                 }
             }
         }
+    }
+
+    fn add_camera(mut commands: Commands) {
+        let camera_entity = commands
+            .spawn_bundle(OrthographicCameraBundle::new_2d())
+            .id();
+        commands.insert_resource(GameCamera(camera_entity))
+    }
+
+    fn remove_camera(mut commands: Commands, game_camera: Res<GameCamera>) {
+        commands.entity(game_camera.0).despawn_recursive();
     }
 
     fn test_system_loading() {
