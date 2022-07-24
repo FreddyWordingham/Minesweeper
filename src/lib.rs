@@ -43,6 +43,9 @@ mod game;
 mod generation;
 mod loading;
 // mod menu;
+pub mod components;
+pub mod resources;
 pub mod settings;
+pub mod systems;
 
 pub use game::GamePlugin;
