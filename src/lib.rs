@@ -47,5 +47,6 @@ pub mod components;
 pub mod resources;
 pub mod settings;
 pub mod systems;
+pub mod utility;
 
 pub use game::GamePlugin;
