@@ -1,10 +1,7 @@
 use bevy::{log, prelude::*, utils::Duration};
 use iyes_loopless::prelude::*;
 
-use crate::{
-    camera::CameraPlugin, generation::GenerationPlugin, loading::LoadingPlugin,
-    resources::GameCamera, settings,
-};
+use crate::{camera::CameraPlugin, generation::GenerationPlugin, loading::LoadingPlugin};
 
 const MIN_ZOOM: f32 = 0.1;
 const MAX_ZOOM: f32 = 1000.0;
@@ -39,11 +36,7 @@ impl Plugin for GamePlugin {
             .add_plugin(LoadingPlugin)
             .add_plugin(GenerationPlugin)
             .add_plugin(CameraPlugin)
-            .add_system(Self::test_system)
-            .add_enter_system(GameState::Playing, Self::add_camera)
-            .add_exit_system(GameState::Playing, Self::remove_camera)
-            .add_enter_system(GameState::Menu, Self::add_camera)
-            .add_exit_system(GameState::Menu, Self::remove_camera);
+            .add_system(Self::test_system);
     }
 }
 
@@ -72,19 +65,6 @@ impl GamePlugin {
                 }
             }
         }
-    }
-
-    fn add_camera(mut commands: Commands) {
-        let mut cam = OrthographicCameraBundle::new_2d();
-        cam.transform.translation.x = settings::MAP_SIZE[0] * 0.5;
-        cam.transform.translation.y = settings::MAP_SIZE[1] * 0.5;
-
-        let camera_entity = commands.spawn_bundle(cam).id();
-        commands.insert_resource(GameCamera(camera_entity))
-    }
-
-    fn remove_camera(mut commands: Commands, game_camera: Res<GameCamera>) {
-        commands.entity(game_camera.0).despawn_recursive();
     }
 
     fn test_system_loading() {
