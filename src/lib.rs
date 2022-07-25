@@ -40,11 +40,11 @@
 
 // mod audio;
 mod camera;
+pub mod components;
 mod game;
 mod generation;
 mod loading;
-// mod menu;
-pub mod components;
+mod menu;
 pub mod resources;
 pub mod settings;
 pub mod systems;

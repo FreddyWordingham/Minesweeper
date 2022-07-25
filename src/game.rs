@@ -1,7 +1,9 @@
 use bevy::{log, prelude::*, utils::Duration};
 use iyes_loopless::prelude::*;
 
-use crate::{camera::CameraPlugin, generation::GenerationPlugin, loading::LoadingPlugin};
+use crate::{
+    camera::CameraPlugin, generation::GenerationPlugin, loading::LoadingPlugin, menu::MenuPlugin,
+};
 
 const MIN_ZOOM: f32 = 0.1;
 const MAX_ZOOM: f32 = 1000.0;
@@ -36,6 +38,7 @@ impl Plugin for GamePlugin {
             .add_plugin(LoadingPlugin)
             .add_plugin(GenerationPlugin)
             .add_plugin(CameraPlugin)
+            .add_plugin(MenuPlugin)
             .add_system(Self::test_system);
     }
 }
