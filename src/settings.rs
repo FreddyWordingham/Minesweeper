@@ -9,8 +9,17 @@ pub const WINDOW_CLEAR_COL: &str = "#444";
 /// Window title.
 pub const WINDOW_TITLE: &str = "Minesweeper";
 
-/// Window size [pixels].
-pub const WINDOW_RES: [f32; 2] = [800.0, 600.0];
+/// Number pixels per tile at a camera scale of 1.0.
+pub const TILE_SIZE: f32 = 20.0;
+
+/// Map size [tiles].
+pub const MAP_RES: [usize; 2] = [40, 30];
+
+/// Map size [pixels].
+pub const MAP_SIZE: [f32; 2] = [MAP_RES[0] as f32 * TILE_SIZE, MAP_RES[1] as f32 * TILE_SIZE];
+
+/// Number of bombs.
+pub const NUM_BOMBS: u16 = 40;
 
 /// Board colour.
 pub const BOARD_COL: &str = "#A77";

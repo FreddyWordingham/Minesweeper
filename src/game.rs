@@ -3,7 +3,7 @@ use iyes_loopless::prelude::*;
 
 use crate::{
     camera::CameraPlugin, generation::GenerationPlugin, loading::LoadingPlugin,
-    resources::GameCamera,
+    resources::GameCamera, settings,
 };
 
 const MIN_ZOOM: f32 = 0.1;
@@ -75,9 +75,11 @@ impl GamePlugin {
     }
 
     fn add_camera(mut commands: Commands) {
-        let camera_entity = commands
-            .spawn_bundle(OrthographicCameraBundle::new_2d())
-            .id();
+        let mut cam = OrthographicCameraBundle::new_2d();
+        cam.transform.translation.x = settings::MAP_SIZE[0] * 0.5;
+        cam.transform.translation.y = settings::MAP_SIZE[1] * 0.5;
+
+        let camera_entity = commands.spawn_bundle(cam).id();
         commands.insert_resource(GameCamera(camera_entity))
     }
 

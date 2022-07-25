@@ -26,14 +26,11 @@ impl GenerationPlugin {
     fn generate_map(mut commands: Commands) {
         log::info!("Generating map!");
 
-        let mut tile_map = TileMap::new([40, 20]);
-        tile_map.add_bombs(40);
+        let mut tile_map = TileMap::new(settings::MAP_RES);
+        tile_map.add_bombs(settings::NUM_BOMBS);
 
-        let board_size = Vec2::new(settings::WINDOW_RES[0], settings::WINDOW_RES[1]);
-        let origin = Vec2::new(
-            -0.5 * settings::WINDOW_RES[0],
-            -0.5 * settings::WINDOW_RES[1],
-        );
+        let board_size = Vec2::new(settings::MAP_SIZE[0], settings::MAP_SIZE[1]);
+        let origin = Vec2::new(0.0, 0.0);
         let board_bounds = Bounds {
             mins: origin,
             maxs: origin + board_size,
