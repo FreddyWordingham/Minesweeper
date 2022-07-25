@@ -1,7 +1,11 @@
 use bevy::prelude::*;
 use iyes_loopless::prelude::*;
 
-use crate::{game::GameState, resources::GameCamera, settings};
+use crate::{
+    game::GameState,
+    resources::{GameCamera, UiCamera},
+    settings,
+};
 
 pub struct CameraPlugin;
 
@@ -16,8 +20,8 @@ impl Plugin for CameraPlugin {
         )
         .add_enter_system(GameState::Playing, Self::add_camera)
         .add_exit_system(GameState::Playing, Self::remove_camera)
-        .add_enter_system(GameState::Menu, Self::add_camera)
-        .add_exit_system(GameState::Menu, Self::remove_camera);
+        .add_enter_system(GameState::Menu, Self::add_ui_camera)
+        .add_exit_system(GameState::Menu, Self::remove_ui_camera);
     }
 }
 
@@ -32,6 +36,15 @@ impl CameraPlugin {
     }
 
     fn remove_camera(mut commands: Commands, game_camera: Res<GameCamera>) {
+        commands.entity(game_camera.0).despawn_recursive();
+    }
+
+    fn add_ui_camera(mut commands: Commands) {
+        let camera_entity = commands.spawn_bundle(UiCameraBundle::default()).id();
+        commands.insert_resource(UiCamera(camera_entity))
+    }
+
+    fn remove_ui_camera(mut commands: Commands, game_camera: Res<UiCamera>) {
         commands.entity(game_camera.0).despawn_recursive();
     }
 
@@ -66,7 +79,5 @@ impl CameraPlugin {
         }
 
         pos.translation += Vec3::new(move_delta.x * cam.scale, move_delta.y * cam.scale, 0.0);
-
-        bevy::log::info!("Move delta: {:?}", move_delta);
     }
 }

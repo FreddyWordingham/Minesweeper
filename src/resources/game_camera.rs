@@ -1,7 +1,7 @@
-//! Main camera.
+//! Game world camera.
 
 use bevy::prelude::*;
 
-/// Main game camera.
+/// Game world camera.
 #[derive(Debug)]
 pub struct GameCamera(pub Entity);
