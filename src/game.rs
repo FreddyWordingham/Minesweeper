@@ -1,10 +1,12 @@
 use bevy::{log, prelude::*, utils::Duration};
+#[cfg(feature = "debug")]
 use bevy_inspector_egui::RegisterInspectable;
 use iyes_loopless::prelude::*;
 
+#[cfg(feature = "debug")]
+use crate::components::Coordinates;
 use crate::{
-    camera::CameraPlugin, components::Coordinates, generation::GenerationPlugin,
-    loading::LoadingPlugin, menu::MenuPlugin,
+    camera::CameraPlugin, generation::GenerationPlugin, loading::LoadingPlugin, menu::MenuPlugin,
 };
 
 const MIN_ZOOM: f32 = 0.1;

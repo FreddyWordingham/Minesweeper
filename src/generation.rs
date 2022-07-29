@@ -2,10 +2,11 @@ use bevy::{log, prelude::*, sprite::Anchor};
 use iyes_loopless::prelude::*;
 
 use crate::{
-    components::Coordinates,
+    components::{Bomb, BombNeighbour, Coordinates},
     game::GameState,
-    resources::{Board, TileMap},
-    settings,
+    loading::{FontAssets, TextureAssets},
+    resources::{Board, Tile, TileMap},
+    settings::{self, TILE_PADDING, TILE_SIZE},
     utility::Bounds,
 };
 
@@ -24,7 +25,7 @@ impl Plugin for GenerationPlugin {
 }
 
 impl GenerationPlugin {
-    fn generate_map(mut commands: Commands) {
+    fn generate_map(mut commands: Commands, fonts: Res<FontAssets>, textures: Res<TextureAssets>) {
         log::info!("Generating map!");
 
         let mut tile_map = TileMap::new(settings::MAP_RES);
@@ -61,7 +62,7 @@ impl GenerationPlugin {
                     .insert(Name::new("Background"));
             })
             .with_children(|parent| {
-                Self::spawn_tiles(parent, &tile_map);
+                Self::spawn_tiles(parent, &tile_map, &fonts, &textures);
             })
             .id();
 
@@ -71,16 +72,101 @@ impl GenerationPlugin {
         });
     }
 
-    fn spawn_tiles(parent: &mut ChildBuilder, tile_map: &TileMap) {
+    fn spawn_tiles(
+        parent: &mut ChildBuilder,
+        tile_map: &TileMap,
+        fonts: &Res<FontAssets>,
+        textures: &Res<TextureAssets>,
+    ) {
         for y in 0..tile_map.height() {
             for x in 0..tile_map.width() {
+                let coords = Coordinates {
+                    x: x as u16,
+                    y: y as u16,
+                };
+
                 let mut cmd = parent.spawn();
                 cmd.insert(Name::new(format!("Tile ({}, {})", x, y)))
-                    .insert(Coordinates {
-                        x: x as u16,
-                        y: y as u16,
+                    .insert(coords)
+                    .insert_bundle(SpriteBundle {
+                        sprite: Sprite {
+                            color: Color::WHITE,
+                            custom_size: Some(Vec2::splat(TILE_SIZE - TILE_PADDING)),
+                            ..default()
+                        },
+                        transform: coords.world_pos(),
+                        texture: textures.tile.clone(),
+                        ..default()
                     });
+
+                match tile_map.tiles[(x, y)] {
+                    Tile::Bomb => {
+                        cmd.insert(Bomb);
+                        cmd.with_children(|parent| {
+                            parent.spawn_bundle(SpriteBundle {
+                                sprite: Sprite {
+                                    custom_size: Some(Vec2::splat(TILE_SIZE - TILE_PADDING)),
+                                    ..default()
+                                },
+                                transform: Transform::from_xyz(0.0, 0.0, 1.0),
+                                texture: textures.bomb.clone(),
+                                ..default()
+                            });
+                        });
+                    }
+                    Tile::BombNeighbor(count) => {
+                        cmd.insert(BombNeighbour::new(count));
+                        cmd.with_children(|parent| {
+                            parent.spawn_bundle(Self::bomb_count_text_bundle(
+                                count,
+                                TILE_SIZE - TILE_PADDING,
+                                fonts,
+                            ));
+                        });
+                    }
+                    Tile::Empty => (),
+                }
             }
+        }
+    }
+
+    /// Generates the bomb counter text 2D Bundle for a given value.
+    fn bomb_count_text_bundle(count: u8, size: f32, fonts: &Res<FontAssets>) -> Text2dBundle {
+        let counter = count.saturating_sub(1) as usize;
+        let colour = match vec![
+            Color::PURPLE,
+            Color::RED,
+            Color::ORANGE,
+            Color::YELLOW,
+            Color::GREEN,
+            Color::BLUE,
+            Color::GREEN,
+            Color::WHITE,
+            Color::GRAY,
+        ]
+        .get(8 - counter)
+        {
+            Some(c) => *c,
+            _ => Color::GRAY,
+        };
+
+        Text2dBundle {
+            text: Text {
+                sections: vec![TextSection {
+                    value: count.to_string(),
+                    style: TextStyle {
+                        color: colour,
+                        font: fonts.raleway.clone(),
+                        font_size: size,
+                    },
+                }],
+                alignment: TextAlignment {
+                    vertical: VerticalAlign::Center,
+                    horizontal: HorizontalAlign::Center,
+                },
+            },
+            transform: Transform::from_xyz(0.0, TILE_PADDING, 1.0),
+            ..default()
         }
     }
 

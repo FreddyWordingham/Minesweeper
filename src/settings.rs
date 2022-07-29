@@ -9,6 +9,9 @@ pub const WINDOW_CLEAR_COL: &str = "#444";
 /// Window title.
 pub const WINDOW_TITLE: &str = "Minesweeper";
 
+/// Number pixels between tiles at a camera scale of 1.0.
+pub const TILE_PADDING: f32 = 2.0;
+
 /// Number pixels per tile at a camera scale of 1.0.
 pub const TILE_SIZE: f32 = 20.0;
 

@@ -4,7 +4,7 @@ use std::{
     ops::{Add, Sub},
 };
 
-use crate::settings::MAP_RES;
+use crate::settings::{MAP_RES, TILE_SIZE};
 
 #[cfg_attr(feature = "debug", derive(bevy_inspector_egui::Inspectable))]
 #[derive(Debug, Copy, Default, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Component)]
@@ -18,6 +18,16 @@ impl Coordinates {
     #[must_use]
     pub const fn new(x: u16, y: u16) -> Self {
         Self { x, y }
+    }
+}
+
+impl Coordinates {
+    pub fn world_pos(self) -> Transform {
+        Transform::from_xyz(
+            TILE_SIZE * (self.x as f32 + 0.5),
+            TILE_SIZE * (self.y as f32 + 0.5),
+            1.0,
+        )
     }
 }
 

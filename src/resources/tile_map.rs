@@ -7,7 +7,7 @@ use crate::resources::Tile;
 #[derive(Debug, Clone)]
 pub struct TileMap {
     /// 2D array of tiles.
-    tiles: Array2<Tile>,
+    pub tiles: Array2<Tile>,
 }
 
 impl TileMap {
@@ -58,6 +58,12 @@ impl TileMap {
                     self.tiles[(x, y)] = Tile::Bomb;
                     break;
                 }
+            }
+        }
+
+        for y in 0..self.height() {
+            for x in 0..self.width() {
+                self.tiles[(x, y)] = Tile::BombNeighbor(7);
             }
         }
     }
