@@ -20,20 +20,15 @@ impl TileMap {
     }
 
     #[inline]
-    pub fn add_bombs(&mut self, bomb_count: u16) {
-        debug_assert!(self.tiles.len() >= (bomb_count + self.bomb_count()).into());
+    #[must_use]
+    pub fn width(&self) -> usize {
+        self.tiles.shape()[0]
+    }
 
-        let mut rng = rand::thread_rng();
-        for _ in 0..bomb_count {
-            loop {
-                let x = rng.gen_range(0..self.tiles.shape()[0]);
-                let y = rng.gen_range(0..self.tiles.shape()[1]);
-                if self.tiles[(x, y)] != Tile::Bomb {
-                    self.tiles[(x, y)] = Tile::Bomb;
-                    break;
-                }
-            }
-        }
+    #[inline]
+    #[must_use]
+    pub fn height(&self) -> usize {
+        self.tiles.shape()[1]
     }
 
     #[inline]
@@ -48,5 +43,22 @@ impl TileMap {
             .count()
             .try_into()
             .expect("Bomb count overflow!")
+    }
+
+    #[inline]
+    pub fn add_bombs(&mut self, bomb_count: u16) {
+        debug_assert!(self.tiles.len() >= (bomb_count + self.bomb_count()).into());
+
+        let mut rng = rand::thread_rng();
+        for _ in 0..bomb_count {
+            loop {
+                let x = rng.gen_range(0..self.tiles.shape()[0]);
+                let y = rng.gen_range(0..self.tiles.shape()[1]);
+                if self.tiles[(x, y)] != Tile::Bomb {
+                    self.tiles[(x, y)] = Tile::Bomb;
+                    break;
+                }
+            }
+        }
     }
 }

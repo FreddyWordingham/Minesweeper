@@ -59,12 +59,24 @@ impl GenerationPlugin {
                     })
                     .insert(Name::new("Background"));
             })
+            .with_children(|parent| {
+                Self::spawn_tiles(parent, &tile_map);
+            })
             .id();
 
         commands.insert_resource(Board {
             entity: board_entity,
             tile_map,
         });
+    }
+
+    fn spawn_tiles(parent: &mut ChildBuilder, tile_map: &TileMap) {
+        for y in 0..tile_map.height() {
+            for x in 0..tile_map.width() {
+                let mut cmd = parent.spawn();
+                cmd.insert(Name::new(format!("Tile ({}, {})", x, y)));
+            }
+        }
     }
 
     fn proceed_to_menu(mut commands: Commands) {
