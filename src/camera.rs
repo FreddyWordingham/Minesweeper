@@ -32,22 +32,25 @@ impl CameraPlugin {
         cam.transform.translation.y = settings::MAP_SIZE[1] * 0.5;
 
         let camera_entity = commands.spawn_bundle(cam).id();
-        commands.insert_resource(GameCamera(camera_entity))
+        commands.insert_resource(GameCamera(camera_entity));
     }
 
+    #[allow(clippy::needless_pass_by_value)]
     fn remove_camera(mut commands: Commands, game_camera: Res<GameCamera>) {
         commands.entity(game_camera.0).despawn_recursive();
     }
 
     fn add_ui_camera(mut commands: Commands) {
         let camera_entity = commands.spawn_bundle(UiCameraBundle::default()).id();
-        commands.insert_resource(UiCamera(camera_entity))
+        commands.insert_resource(UiCamera(camera_entity));
     }
 
+    #[allow(clippy::needless_pass_by_value)]
     fn remove_ui_camera(mut commands: Commands, game_camera: Res<UiCamera>) {
         commands.entity(game_camera.0).despawn_recursive();
     }
 
+    #[allow(clippy::needless_pass_by_value)]
     fn zoom_camera(keys: Res<Input<KeyCode>>, mut cam: Query<&mut OrthographicProjection>) {
         let mut cam = cam.single_mut();
 
@@ -58,6 +61,7 @@ impl CameraPlugin {
         }
     }
 
+    #[allow(clippy::needless_pass_by_value)]
     fn pan_camera(
         keys: Res<Input<KeyCode>>,
         mut cam: Query<(&mut Transform, &mut OrthographicProjection)>,

@@ -63,7 +63,7 @@ impl GamePlugin {
                     log::info!("Switching to playing state");
                     commands.insert_resource(NextState(GameState::Playing));
                 }
-                _ => {
+                GameState::Loading | GameState::Generating => {
                     log::info!("Can not switch states from {:?}", current_state.0);
                 }
             }

@@ -37,13 +37,16 @@ impl TileMap {
     }
 
     #[inline]
+    #[must_use]
     pub fn bomb_count(&self) -> u16 {
         self.tiles
             .iter()
-            .filter(|t| match t {
+            .filter(|t| match **t {
                 Tile::Bomb => true,
-                _ => false,
+                Tile::BombNeighbor(_) | Tile::Empty => false,
             })
-            .count() as u16
+            .count()
+            .try_into()
+            .expect("Bomb count overflow!")
     }
 }

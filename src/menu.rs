@@ -22,6 +22,7 @@ impl Plugin for MenuPlugin {
 pub struct MenuData;
 
 impl MenuPlugin {
+    #[allow(clippy::needless_pass_by_value)]
     pub fn spawn_menu(mut commands: Commands, font_assets: Res<FontAssets>) {
         commands
             .spawn_bundle(ButtonBundle {
@@ -42,7 +43,7 @@ impl MenuPlugin {
                 parent.spawn_bundle(TextBundle {
                     text: Text {
                         sections: vec![TextSection {
-                            value: "Start".to_string(),
+                            value: "Start".to_owned(),
                             style: TextStyle {
                                 font: font_assets.raleway.clone(),
                                 font_size: 40.0,
@@ -56,12 +57,14 @@ impl MenuPlugin {
             });
     }
 
+    #[allow(clippy::needless_pass_by_value)]
     pub fn despawn_menu(mut commands: Commands, menu_query: Query<(Entity, &MenuData)>) {
         for (entity, _) in menu_query.iter() {
             commands.entity(entity).despawn_recursive();
         }
     }
 
+    #[allow(clippy::type_complexity)]
     fn click_play_button(
         mut commands: Commands,
         mut interaction_query: Query<
