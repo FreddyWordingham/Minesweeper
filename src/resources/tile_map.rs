@@ -1,7 +1,22 @@
 use ndarray::Array2;
 use rand::Rng;
 
-use crate::resources::Tile;
+use crate::{components::Coordinates, resources::Tile};
+
+/// Delta coordinates for all 8 square neighbors
+/// [6] [7] [8]
+/// [4]     [5]
+/// [1] [2] [3]
+const SQUARE_COORDINATES: [(i8, i8); 8] = [
+    (-1, -1),
+    (0, -1),
+    (1, -1),
+    (-1, 0),
+    (1, 0),
+    (-1, 1),
+    (0, 1),
+    (1, 1),
+];
 
 /// Base tile map.
 #[derive(Debug, Clone)]
@@ -63,8 +78,42 @@ impl TileMap {
 
         for y in 0..self.height() {
             for x in 0..self.width() {
-                self.tiles[(x, y)] = Tile::BombNeighbor(7);
+                let coords = Coordinates {
+                    x: x as u16,
+                    y: y as u16,
+                };
+                if !self.is_bomb_at(coords) {
+                    let count = self.bomb_count_at(coords);
+                    if count > 0 {
+                        self.tiles[(x, y)] = Tile::BombNeighbor(count);
+                    }
+                }
             }
         }
+    }
+
+    #[inline]
+    pub fn safe_square_at(coordinates: Coordinates) -> impl Iterator<Item = Coordinates> {
+        SQUARE_COORDINATES
+            .iter()
+            .copied()
+            .map(move |offset| coordinates + offset)
+    }
+
+    #[inline]
+    #[must_use]
+    pub fn is_bomb_at(&self, coordinates: Coordinates) -> bool {
+        if coordinates.x as usize >= self.width() || coordinates.y as usize >= self.height() {
+            return false;
+        };
+        self.tiles[(coordinates.x as usize, coordinates.y as usize)].is_bomb()
+    }
+
+    #[inline]
+    #[must_use]
+    pub fn bomb_count_at(&self, coordinates: Coordinates) -> u8 {
+        Self::safe_square_at(coordinates)
+            .filter(|coord| self.is_bomb_at(*coord))
+            .count() as u8
     }
 }
