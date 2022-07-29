@@ -2,6 +2,7 @@ use bevy::{log, prelude::*, sprite::Anchor};
 use iyes_loopless::prelude::*;
 
 use crate::{
+    components::Coordinates,
     game::GameState,
     resources::{Board, TileMap},
     settings,
@@ -74,7 +75,11 @@ impl GenerationPlugin {
         for y in 0..tile_map.height() {
             for x in 0..tile_map.width() {
                 let mut cmd = parent.spawn();
-                cmd.insert(Name::new(format!("Tile ({}, {})", x, y)));
+                cmd.insert(Name::new(format!("Tile ({}, {})", x, y)))
+                    .insert(Coordinates {
+                        x: x as u16,
+                        y: y as u16,
+                    });
             }
         }
     }

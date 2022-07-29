@@ -1,8 +1,10 @@
 use bevy::{log, prelude::*, utils::Duration};
+use bevy_inspector_egui::RegisterInspectable;
 use iyes_loopless::prelude::*;
 
 use crate::{
-    camera::CameraPlugin, generation::GenerationPlugin, loading::LoadingPlugin, menu::MenuPlugin,
+    camera::CameraPlugin, components::Coordinates, generation::GenerationPlugin,
+    loading::LoadingPlugin, menu::MenuPlugin,
 };
 
 const MIN_ZOOM: f32 = 0.1;
@@ -22,6 +24,11 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     #[inline]
     fn build(&self, app: &mut App) {
+        #[cfg(feature = "debug")]
+        {
+            app.register_inspectable::<Coordinates>();
+        }
+
         let mut fixed_update = SystemStage::parallel();
         fixed_update
             .add_system(Self::test_system_loading.run_in_state(GameState::Loading))
