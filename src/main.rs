@@ -20,8 +20,8 @@ fn main() {
         Color::hex(settings::WINDOW_CLEAR_COL.split_at(1).1).unwrap(),
     ))
     .insert_resource(WindowDescriptor {
-        width: settings::MAP_SIZE[0],
-        height: settings::MAP_SIZE[1],
+        width: settings::WINDOW_SIZE[0],
+        height: settings::WINDOW_SIZE[1],
         title: settings::WINDOW_TITLE.to_string(),
         ..default()
     })

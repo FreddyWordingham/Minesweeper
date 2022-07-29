@@ -41,6 +41,9 @@ pub struct TextureAssets {
     #[asset(path = "icons/tile.png")]
     pub tile: Handle<Image>,
 
+    #[asset(path = "icons/cover.png")]
+    pub cover: Handle<Image>,
+
     #[asset(path = "icons/bomb.png")]
     pub bomb: Handle<Image>,
 

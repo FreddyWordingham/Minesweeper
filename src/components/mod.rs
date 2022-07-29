@@ -1,9 +1,9 @@
 mod bomb;
 mod bomb_neighbour;
 mod coordinates;
-mod uncover;
+mod covered;
 
 pub use bomb::Bomb;
 pub use bomb_neighbour::BombNeighbour;
 pub use coordinates::Coordinates;
-pub use uncover::Uncover;
+pub use covered::Covered;

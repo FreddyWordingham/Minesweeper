@@ -2,7 +2,7 @@ use bevy::{log, prelude::*, sprite::Anchor};
 use iyes_loopless::prelude::*;
 
 use crate::{
-    components::{Bomb, BombNeighbour, Coordinates},
+    components::{Bomb, BombNeighbour, Coordinates, Covered},
     game::GameState,
     loading::{FontAssets, TextureAssets},
     resources::{Board, Tile, TileMap},
@@ -110,8 +110,7 @@ impl GenerationPlugin {
 
                 match tile_map.tiles[(x, y)] {
                     Tile::Bomb => {
-                        cmd.insert(Bomb);
-                        cmd.with_children(|parent| {
+                        cmd.insert(Bomb).with_children(|parent| {
                             parent.spawn_bundle(SpriteBundle {
                                 sprite: Sprite {
                                     custom_size: Some(Vec2::splat(TILE_SIZE - TILE_PADDING)),
@@ -124,17 +123,30 @@ impl GenerationPlugin {
                         });
                     }
                     Tile::BombNeighbor(count) => {
-                        cmd.insert(BombNeighbour::new(count));
-                        cmd.with_children(|parent| {
-                            parent.spawn_bundle(Self::bomb_count_text_bundle(
-                                count,
-                                TILE_SIZE - TILE_PADDING,
-                                fonts,
-                            ));
-                        });
+                        cmd.insert(BombNeighbour::new(count))
+                            .with_children(|parent| {
+                                parent.spawn_bundle(Self::bomb_count_text_bundle(
+                                    count,
+                                    TILE_SIZE - TILE_PADDING,
+                                    fonts,
+                                ));
+                            });
                     }
                     Tile::Empty => (),
                 }
+
+                cmd.insert(Covered {}).with_children(|parent| {
+                    parent.spawn_bundle(SpriteBundle {
+                        sprite: Sprite {
+                            color: Color::GRAY,
+                            custom_size: Some(Vec2::splat(TILE_SIZE - TILE_PADDING)),
+                            ..default()
+                        },
+                        transform: Transform::from_xyz(0.0, 0.0, 2.0),
+                        texture: textures.cover.clone(),
+                        ..default()
+                    });
+                });
             }
         }
     }
