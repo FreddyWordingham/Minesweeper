@@ -46,11 +46,11 @@ mod camera;
 pub mod components;
 mod game;
 mod generation;
+pub mod input;
 mod loading;
 mod menu;
 pub mod resources;
 pub mod settings;
-pub mod systems;
 pub mod utility;
 
 pub use game::GamePlugin;

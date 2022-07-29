@@ -6,7 +6,8 @@ use iyes_loopless::prelude::*;
 #[cfg(feature = "debug")]
 use crate::components::Coordinates;
 use crate::{
-    camera::CameraPlugin, generation::GenerationPlugin, loading::LoadingPlugin, menu::MenuPlugin,
+    camera::CameraPlugin, generation::GenerationPlugin, input::InputPlugin, loading::LoadingPlugin,
+    menu::MenuPlugin,
 };
 
 const MIN_ZOOM: f32 = 0.1;
@@ -48,6 +49,7 @@ impl Plugin for GamePlugin {
             .add_plugin(GenerationPlugin)
             .add_plugin(CameraPlugin)
             .add_plugin(MenuPlugin)
+            .add_plugin(InputPlugin)
             .add_system(Self::test_system);
     }
 }
