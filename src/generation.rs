@@ -28,7 +28,8 @@ impl GenerationPlugin {
     fn generate_map(mut commands: Commands, fonts: Res<FontAssets>, textures: Res<TextureAssets>) {
         log::info!("Generating map!");
 
-        let mut tile_map = TileMap::new(settings::MAP_RES);
+        let mut tile_map =
+            TileMap::new([settings::MAP_RES[0] as usize, settings::MAP_RES[1] as usize]);
         tile_map.add_bombs(settings::NUM_BOMBS);
         tile_map.add_bombs(settings::NUM_BOMBS);
         tile_map.add_bombs(settings::NUM_BOMBS);
@@ -85,8 +86,8 @@ impl GenerationPlugin {
         for y in 0..tile_map.height() {
             for x in 0..tile_map.width() {
                 let coords = Coordinates {
-                    x: x as u16,
-                    y: y as u16,
+                    x: x as i16,
+                    y: y as i16,
                 };
 
                 let mut cmd = parent.spawn();
@@ -98,7 +99,11 @@ impl GenerationPlugin {
                             custom_size: Some(Vec2::splat(TILE_SIZE - TILE_PADDING)),
                             ..default()
                         },
-                        transform: coords.world_pos(),
+                        transform: Transform::from_xyz(
+                            coords.world_pos().x,
+                            coords.world_pos().y,
+                            1.0,
+                        ),
                         texture: textures.tile.clone(),
                         ..default()
                     });

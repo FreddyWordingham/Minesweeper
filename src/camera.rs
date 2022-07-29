@@ -2,6 +2,7 @@ use bevy::prelude::*;
 use iyes_loopless::prelude::*;
 
 use crate::{
+    components::Coordinates,
     game::GameState,
     resources::{GameCamera, UiCamera},
     settings,
@@ -15,7 +16,8 @@ impl Plugin for CameraPlugin {
             ConditionSet::new()
                 .run_in_state(GameState::Playing)
                 .with_system(Self::zoom_camera)
-                .with_system(Self::pan_camera)
+                //.with_system(Self::pan_camera)
+                .with_system(Self::pan_world)
                 .into(),
         )
         .add_enter_system(GameState::Playing, Self::add_camera)
@@ -59,6 +61,12 @@ impl CameraPlugin {
         } else if keys.just_pressed(KeyCode::Minus) {
             cam.scale /= settings::CAMERA_ZOOM_SPEED;
         }
+
+        if cam.scale > settings::CAMERA_MAX_ZOOM {
+            cam.scale = settings::CAMERA_MAX_ZOOM;
+        } else if cam.scale < settings::CAMERA_MIN_ZOOM {
+            cam.scale = settings::CAMERA_MIN_ZOOM;
+        }
     }
 
     #[allow(clippy::needless_pass_by_value)]
@@ -83,5 +91,32 @@ impl CameraPlugin {
         }
 
         pos.translation += Vec3::new(move_delta.x * cam.scale, move_delta.y * cam.scale, 0.0);
+    }
+
+    #[allow(clippy::needless_pass_by_value)]
+    fn pan_world(keys: Res<Input<KeyCode>>, mut coords: Query<(&mut Transform, &mut Coordinates)>) {
+        let mut dx = 0;
+        let mut dy = 0;
+        if keys.pressed(KeyCode::W) {
+            dy -= 1;
+        }
+        if keys.pressed(KeyCode::A) {
+            dx += 1;
+        }
+        if keys.pressed(KeyCode::S) {
+            dy += 1;
+        }
+        if keys.pressed(KeyCode::D) {
+            dx -= 1;
+        }
+
+        if dx == 0 && dy == 0 {
+            return;
+        }
+
+        for (mut pos, mut coords) in coords.iter_mut() {
+            *coords = *coords + (dx, dy);
+            pos.translation = coords.world_pos();
+        }
     }
 }

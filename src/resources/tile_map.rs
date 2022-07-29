@@ -7,7 +7,7 @@ use crate::{components::Coordinates, resources::Tile};
 /// [6] [7] [8]
 /// [4]     [5]
 /// [1] [2] [3]
-const SQUARE_COORDINATES: [(i8, i8); 8] = [
+const SQUARE_COORDINATES: [(i16, i16); 8] = [
     (-1, -1),
     (0, -1),
     (1, -1),
@@ -79,8 +79,8 @@ impl TileMap {
         for y in 0..self.height() {
             for x in 0..self.width() {
                 let coords = Coordinates {
-                    x: x as u16,
-                    y: y as u16,
+                    x: x as i16,
+                    y: y as i16,
                 };
                 if !self.is_bomb_at(coords) {
                     let count = self.bomb_count_at(coords);

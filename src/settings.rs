@@ -16,7 +16,7 @@ pub const TILE_PADDING: f32 = 2.0;
 pub const TILE_SIZE: f32 = 20.0;
 
 /// Map size [tiles].
-pub const MAP_RES: [usize; 2] = [40, 30];
+pub const MAP_RES: [i16; 2] = [40, 30];
 
 /// Map size [pixels].
 pub const MAP_SIZE: [f32; 2] = [MAP_RES[0] as f32 * TILE_SIZE, MAP_RES[1] as f32 * TILE_SIZE];
@@ -41,3 +41,9 @@ pub const CAMERA_ZOOM_SPEED: f32 = 0.5;
 
 /// Camera pan rate (should be greater than zero).
 pub const CAMERA_PAN_SPEED: f32 = 2.0;
+
+/// Camera minimum zoom.
+pub const CAMERA_MIN_ZOOM: f32 = 0.125;
+
+/// Camera maximum zoom.
+pub const CAMERA_MAX_ZOOM: f32 = 1.0;
