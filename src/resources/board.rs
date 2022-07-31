@@ -22,4 +22,10 @@ impl Board {
             .copied()
             .collect()
     }
+
+    #[must_use]
+    #[inline]
+    pub fn is_completed(&self) -> bool {
+        self.tile_map.bomb_count() as usize == self.covered_tiles.len()
+    }
 }

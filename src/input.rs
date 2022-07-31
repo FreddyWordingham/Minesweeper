@@ -17,6 +17,7 @@ impl Plugin for InputPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<TileTriggerEvent>()
             .add_event::<TileMarkEvent>()
+            .add_event::<BoardCompletedEvent>()
             .add_event::<BombExplosionEvent>()
             .add_system_set(
                 ConditionSet::new()
@@ -34,6 +35,9 @@ pub struct TileTriggerEvent(pub Coordinates);
 
 #[derive(Debug, Copy, Clone)]
 pub struct TileMarkEvent(pub Coordinates);
+
+#[derive(Debug, Copy, Clone)]
+pub struct BoardCompletedEvent;
 
 #[derive(Debug, Copy, Clone)]
 pub struct BombExplosionEvent;
@@ -106,6 +110,7 @@ impl InputPlugin {
         camera: Res<GameCamera>,
         children: Query<(Entity, &Parent), With<Uncover>>,
         parents: Query<(&Coordinates, Option<&Bomb>, Option<&BombNeighbour>)>,
+        mut board_completed_event_wr: EventWriter<BoardCompletedEvent>,
         mut bomb_explosion_event_wr: EventWriter<BombExplosionEvent>,
     ) {
         for (entity, parent) in children.iter() {
@@ -123,15 +128,10 @@ impl InputPlugin {
                 .covered_tiles
                 .remove(&(*coords + (camera.1.x, camera.1.y)));
 
-            // match board.try_uncover_tile(coords) {
-            //     None => log::debug!("Tried to uncover an already uncovered tile"),
-            //     Some(e) => log::debug!("Uncovered tile {} (entity: {:?})", coords, e),
-            // }
-
-            // if board.is_completed() {
-            //     log::info!("*Board completed*");
-            //     board_completed_event_wr.send(BoardCompletedEvent);
-            // }
+            if board.is_completed() {
+                log::info!("*Board completed*");
+                board_completed_event_wr.send(BoardCompletedEvent);
+            }
 
             if bomb.is_some() {
                 log::info!("Boom!");
