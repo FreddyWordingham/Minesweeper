@@ -103,6 +103,7 @@ impl InputPlugin {
     pub fn uncover_tiles(
         mut commands: Commands,
         mut board: ResMut<Board>,
+        camera: Res<GameCamera>,
         children: Query<(Entity, &Parent), With<Uncover>>,
         parents: Query<(&Coordinates, Option<&Bomb>, Option<&BombNeighbour>)>,
         mut bomb_explosion_event_wr: EventWriter<BombExplosionEvent>,
@@ -118,6 +119,10 @@ impl InputPlugin {
                 }
             };
 
+            board
+                .covered_tiles
+                .remove(&(*coords + (camera.1.x, camera.1.y)));
+
             // match board.try_uncover_tile(coords) {
             //     None => log::debug!("Tried to uncover an already uncovered tile"),
             //     Some(e) => log::debug!("Uncovered tile {} (entity: {:?})", coords, e),
@@ -131,6 +136,10 @@ impl InputPlugin {
             if bomb.is_some() {
                 log::info!("Boom!");
                 bomb_explosion_event_wr.send(BombExplosionEvent);
+            } else if bomb_counter.is_none() {
+                for entity in board.adjacent_covered_tiles(*coords + (camera.1.x, camera.1.y)) {
+                    commands.entity(entity).insert(Uncover);
+                }
             }
         }
     }

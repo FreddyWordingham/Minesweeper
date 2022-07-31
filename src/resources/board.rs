@@ -12,3 +12,14 @@ pub struct Board {
     pub covered_tiles: HashMap<Coordinates, Entity>,
     pub marked_tiles: Vec<Coordinates>,
 }
+
+impl Board {
+    #[must_use]
+    #[inline]
+    pub fn adjacent_covered_tiles(&self, coord: Coordinates) -> Vec<Entity> {
+        TileMap::safe_square_at(coord)
+            .filter_map(|c| self.covered_tiles.get(&c))
+            .copied()
+            .collect()
+    }
+}

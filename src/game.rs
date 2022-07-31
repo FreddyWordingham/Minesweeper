@@ -33,11 +33,7 @@ impl Plugin for GamePlugin {
         }
 
         let mut fixed_update = SystemStage::parallel();
-        fixed_update
-            .add_system(Self::test_system_loading.run_in_state(GameState::Loading))
-            .add_system(Self::test_system_generating.run_in_state(GameState::Generating))
-            .add_system(Self::test_system_menu.run_in_state(GameState::Menu))
-            .add_system(Self::test_system_playing.run_in_state(GameState::Playing));
+        // fixed_update.add_system(InputPlugin::uncover_tiles.run_in_state(GameState::Playing));
 
         app.add_loopless_state(GameState::Loading)
             .add_stage_before(
@@ -49,51 +45,6 @@ impl Plugin for GamePlugin {
             .add_plugin(GenerationPlugin)
             .add_plugin(CameraPlugin)
             .add_plugin(MenuPlugin)
-            .add_plugin(InputPlugin)
-            .add_system(Self::test_system);
-    }
-}
-
-impl GamePlugin {
-    #[allow(clippy::needless_pass_by_value)]
-    fn test_system(
-        mut commands: Commands,
-        current_state: Res<CurrentState<GameState>>,
-        keys: Res<Input<KeyCode>>,
-    ) {
-        if keys.just_pressed(KeyCode::Return) {
-            log::info!("[ENTER!] {:?}", *current_state);
-        } else if keys.just_pressed(KeyCode::Space) {
-            log::info!("[SPACED!]");
-            match current_state.0 {
-                GameState::Playing => {
-                    log::info!("Switching to menu state");
-                    commands.insert_resource(NextState(GameState::Menu));
-                }
-                GameState::Menu => {
-                    log::info!("Switching to playing state");
-                    commands.insert_resource(NextState(GameState::Playing));
-                }
-                GameState::Loading | GameState::Generating => {
-                    log::info!("Can not switch states from {:?}", current_state.0);
-                }
-            }
-        }
-    }
-
-    fn test_system_loading() {
-        log::info!("** loading **");
-    }
-
-    fn test_system_generating() {
-        log::info!("** generating **");
-    }
-
-    fn test_system_menu() {
-        log::info!("** menu **");
-    }
-
-    fn test_system_playing() {
-        log::info!("** playing **");
+            .add_plugin(InputPlugin);
     }
 }
