@@ -34,7 +34,7 @@ impl CameraPlugin {
         cam.transform.translation.y = settings::MAP_SIZE[1] * 0.5;
 
         let camera_entity = commands.spawn_bundle(cam).id();
-        commands.insert_resource(GameCamera(camera_entity));
+        commands.insert_resource(GameCamera(camera_entity, Coordinates { x: 0, y: 0 }));
     }
 
     #[allow(clippy::needless_pass_by_value)]
@@ -94,7 +94,11 @@ impl CameraPlugin {
     }
 
     #[allow(clippy::needless_pass_by_value)]
-    fn pan_world(keys: Res<Input<KeyCode>>, mut coords: Query<(&mut Transform, &mut Coordinates)>) {
+    fn pan_world(
+        keys: Res<Input<KeyCode>>,
+        mut camera: ResMut<GameCamera>,
+        mut coords: Query<(&mut Transform, &mut Coordinates)>,
+    ) {
         let mut dx = 0;
         let mut dy = 0;
         if keys.pressed(KeyCode::W) {
@@ -114,6 +118,7 @@ impl CameraPlugin {
             return;
         }
 
+        camera.1 = camera.1 + (-dx, -dy);
         for (mut pos, mut coords) in coords.iter_mut() {
             *coords = *coords + (dx, dy);
             pos.translation = coords.world_pos();

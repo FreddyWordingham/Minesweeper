@@ -1,8 +1,8 @@
-use bevy::{log, prelude::*, sprite::Anchor};
+use bevy::{log, prelude::*, sprite::Anchor, utils::HashMap};
 use iyes_loopless::prelude::*;
 
 use crate::{
-    components::{Bomb, BombNeighbour, Coordinates, Covered},
+    components::{Bomb, BombNeighbour, Coordinates},
     game::GameState,
     loading::{FontAssets, TextureAssets},
     resources::{Board, Tile, TileMap},
@@ -43,6 +43,7 @@ impl GenerationPlugin {
             maxs: origin + board_size,
         };
 
+        let mut covered_tiles = HashMap::with_capacity(tile_map.width() * tile_map.height());
         let board_entity = commands
             .spawn()
             .insert(Name::new("Board"))
@@ -67,13 +68,15 @@ impl GenerationPlugin {
                     .insert(Name::new("Background"));
             })
             .with_children(|parent| {
-                Self::spawn_tiles(parent, &tile_map, &fonts, &textures);
+                Self::spawn_tiles(parent, &tile_map, &fonts, &textures, &mut covered_tiles);
             })
             .id();
 
         commands.insert_resource(Board {
             entity: board_entity,
             tile_map,
+            covered_tiles,
+            marked_tiles: vec![],
         });
     }
 
@@ -82,6 +85,7 @@ impl GenerationPlugin {
         tile_map: &TileMap,
         fonts: &Res<FontAssets>,
         textures: &Res<TextureAssets>,
+        covered_tiles: &mut HashMap<Coordinates, Entity>,
     ) {
         for y in 0..tile_map.height() {
             for x in 0..tile_map.width() {
@@ -135,17 +139,21 @@ impl GenerationPlugin {
                     Tile::Empty => (),
                 }
 
-                cmd.insert(Covered {}).with_children(|parent| {
-                    parent.spawn_bundle(SpriteBundle {
-                        sprite: Sprite {
-                            color: Color::GRAY,
-                            custom_size: Some(Vec2::splat(TILE_SIZE - TILE_PADDING)),
+                cmd.with_children(|parent| {
+                    let entity = parent
+                        .spawn_bundle(SpriteBundle {
+                            sprite: Sprite {
+                                color: Color::GRAY,
+                                custom_size: Some(Vec2::splat(TILE_SIZE - TILE_PADDING)),
+                                ..default()
+                            },
+                            transform: Transform::from_xyz(0.0, 0.0, 2.0),
+                            texture: textures.cover.clone(),
                             ..default()
-                        },
-                        transform: Transform::from_xyz(0.0, 0.0, 2.0),
-                        texture: textures.cover.clone(),
-                        ..default()
-                    });
+                        })
+                        .insert(Name::new("Tile Cover"))
+                        .id();
+                    covered_tiles.insert(coords, entity);
                 });
             }
         }
