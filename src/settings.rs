@@ -25,7 +25,7 @@ pub const MAP_RES: [i16; 2] = [200, 200];
 pub const MAP_SIZE: [f32; 2] = [MAP_RES[0] as f32 * TILE_SIZE, MAP_RES[1] as f32 * TILE_SIZE];
 
 /// Number of bombs.
-pub const NUM_BOMBS: u16 = 1000;
+pub const NUM_BOMBS: u16 = 10000;
 
 /// Board colour.
 pub const BOARD_COL: &str = "#A77";
@@ -49,4 +49,4 @@ pub const CAMERA_PAN_SPEED: f32 = 2.0;
 pub const CAMERA_MIN_ZOOM: f32 = 0.125;
 
 /// Camera maximum zoom.
-pub const CAMERA_MAX_ZOOM: f32 = 4.0;
+pub const CAMERA_MAX_ZOOM: f32 = 1.0;

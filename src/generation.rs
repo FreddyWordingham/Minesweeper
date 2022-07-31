@@ -31,10 +31,6 @@ impl GenerationPlugin {
         let mut tile_map =
             TileMap::new([settings::MAP_RES[0] as usize, settings::MAP_RES[1] as usize]);
         tile_map.add_bombs(settings::NUM_BOMBS);
-        tile_map.add_bombs(settings::NUM_BOMBS);
-        tile_map.add_bombs(settings::NUM_BOMBS);
-        tile_map.add_bombs(settings::NUM_BOMBS);
-        tile_map.add_bombs(settings::NUM_BOMBS);
 
         let board_size = Vec2::new(settings::MAP_SIZE[0], settings::MAP_SIZE[1]);
         let origin = Vec2::new(0.0, 0.0);
